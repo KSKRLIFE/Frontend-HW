@@ -40,8 +40,31 @@ async function renderChart() {
   const houseCounts = {};
 
   characters.forEach((character) => {
-    const familyName = character.family.replace(houseRegex, "");
-    houseCounts[familyName] = (houseCounts[familyName] || 0) + 1;
+    let house = character.family;
+
+    if (
+      house === "House Targaryn" ||
+      house === "Targaryn" ||
+      house === "Targaryan"
+    ) {
+      house = "House Targaryen";
+    } else if (
+      house === "House Lannister" ||
+      house === "Lanister" ||
+      house === "Lannister"
+    ) {
+      house = "House Lanister";
+    } else if (
+      house === "" ||
+      house === "Unknown" ||
+      house === "Unkown" ||
+      house === "None"
+    ) {
+      houseCounts["Unknown"] = (houseCounts["Unknown"] || 0) + 1;
+    } else {
+      const familyName = house.replace(houseRegex, "");
+      houseCounts[familyName] = (houseCounts[familyName] || 0) + 1;
+    }
   });
 
   const donutChart = document.querySelector(".donut-chart");

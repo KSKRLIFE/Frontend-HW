@@ -13,7 +13,7 @@ const backgroundColors = [
   "rgba(83, 102, 255, 0.8)",
   "rgba(40, 159, 64, 0.8)",
   "rgba(210, 199, 199, 0.8)",
-  "rgba(78, 52, 199, 0.8)"
+  "rgba(78, 52, 199, 0.8)",
 ];
 
 const borderColors = [
@@ -27,7 +27,7 @@ const borderColors = [
   "rgba(83, 102, 255, 1)",
   "rgba(40, 159, 64, 1)",
   "rgba(210, 199, 199, 1)",
-  "rgba(78, 52, 199, 1)"
+  "rgba(78, 52, 199, 1)",
 ];
 
 const url = "https://thronesapi.com/api/v2/Characters";
@@ -53,6 +53,28 @@ function Charts() {
     const houseRegex = /House /;
     const houseCounts = {};
     characters.forEach((character) => {
+      let house = character.family;
+
+      if (
+        house === "House Targaryn" ||
+        house === "Targaryn" ||
+        house === "Targaryan"
+      ) {
+        house = "House Targaryen";
+      } else if (
+        house === "House Lannister" ||
+        house === "Lanister" ||
+        house === "Lannister"
+      ) {
+        house = "House Lanister";
+      } else if (
+        house === "" ||
+        house === "Unknown" ||
+        house === "Unkown" ||
+        house === "None"
+      ) {
+        houseCounts["Unknown"] = (houseCounts["Unknown"] || 0) + 1;
+      }
       const familyName = character.family.replace(houseRegex, "");
       houseCounts[familyName] = (houseCounts[familyName] || 0) + 1;
     });
@@ -72,10 +94,10 @@ function Charts() {
             data: Object.values(houseCounts),
             backgroundColor: backgroundColors,
             borderColor: borderColors,
-            borderWidth: 1
-          }
-        ]
-      }
+            borderWidth: 1,
+          },
+        ],
+      },
     });
 
     setChartInstance(newChartInstance);
